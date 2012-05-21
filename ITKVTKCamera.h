@@ -7,6 +7,8 @@ class vtkInteractorStyleImage;
 
 class ITKVTKCamera
 {
+public:
+  ITKVTKCamera();
   void Flip();
 
   void SetCameraPosition1();

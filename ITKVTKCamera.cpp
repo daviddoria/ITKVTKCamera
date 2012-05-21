@@ -4,6 +4,11 @@
 #include <vtkRenderWindow.h>
 #include <vtkInteractorStyleImage.h>
 
+ITKVTKCamera::ITKVTKCamera() :Flipped(false)
+{
+
+}
+
 void ITKVTKCamera::SetCameraPosition1()
 {
   double leftToRight[3] = {-1,0,0};
