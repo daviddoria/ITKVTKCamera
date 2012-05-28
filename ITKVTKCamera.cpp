@@ -46,3 +46,18 @@ void ITKVTKCamera::Flip()
     }
   this->Flipped = !this->Flipped;
 }
+
+void ITKVTKCamera::SetInteractorStyle(vtkInteractorStyleImage* interactorStyle)
+{
+  this->InteractorStyle = interactorStyle;
+}
+
+void ITKVTKCamera::SetRenderer(vtkRenderer* renderer)
+{
+  this->Renderer = renderer;
+}
+
+void ITKVTKCamera::SetRenderWindow(vtkRenderWindow* renderWindow)
+{
+  this->RenderWindow = renderWindow;
+}
