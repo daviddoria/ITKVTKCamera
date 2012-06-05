@@ -4,24 +4,67 @@
 #include <vtkRenderWindow.h>
 #include <vtkInteractorStyleImage.h>
 
-ITKVTKCamera::ITKVTKCamera() :Flipped(false)
+ITKVTKCamera::ITKVTKCamera()
 {
+  SharedConstructor();
+}
 
+void ITKVTKCamera::SharedConstructor()
+{
+  this->Flipped = false;
+
+  this->LeftToRight[0] = -1;
+  this->LeftToRight[1] = 0;
+  this->LeftToRight[2] = 0;
+
+  this->BottomToTop[0] = 0;
+  this->BottomToTop[1] = 1;
+  this->BottomToTop[2] = 0;
+}
+
+ITKVTKCamera::ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer, vtkRenderWindow* renderWindow)
+{
+  SharedConstructor();
+  SetRenderer(renderer);
+  SetInteractorStyle(interactorStyle);
+  SetRenderWindow(renderWindow);
+}
+
+void ITKVTKCamera::FlipVertically()
+{
+  this->BottomToTop[1] = -1.0f * this->BottomToTop[1];
+  SetCameraPosition(this->LeftToRight, this->BottomToTop);
+}
+
+void ITKVTKCamera::FlipHorizontally()
+{
+  this->LeftToRight[0] = -1.0f * this->LeftToRight[0];
+  SetCameraPosition(this->LeftToRight, this->BottomToTop);
 }
 
 void ITKVTKCamera::SetCameraPosition1()
 {
-  double leftToRight[3] = {-1,0,0};
-  double bottomToTop[3] = {0,1,0};
-  SetCameraPosition(leftToRight, bottomToTop);
+  this->LeftToRight[0] = -1;
+  this->LeftToRight[1] = 0;
+  this->LeftToRight[2] = 0;
+
+  this->BottomToTop[0] = 0;
+  this->BottomToTop[1] = 1;
+  this->BottomToTop[2] = 0;
+  SetCameraPosition(this->LeftToRight, this->BottomToTop);
 }
 
 void ITKVTKCamera::SetCameraPosition2()
 {
-  double leftToRight[3] = {-1,0,0};
-  double bottomToTop[3] = {0,-1,0};
+  this->LeftToRight[0] = -1;
+  this->LeftToRight[1] = 0;
+  this->LeftToRight[2] = 0;
 
-  SetCameraPosition(leftToRight, bottomToTop);
+  this->BottomToTop[0] = 0;
+  this->BottomToTop[1] = -1;
+  this->BottomToTop[2] = 0;
+
+  SetCameraPosition(this->LeftToRight, this->BottomToTop);
 }
 
 void ITKVTKCamera::SetCameraPosition(const double leftToRight[3], const double bottomToTop[3])
