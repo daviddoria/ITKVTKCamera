@@ -1,0 +1,3 @@
+[submodule "ITKVTKHelpers"]
+	path = ITKVTKHelpers
+	url = https://github.com/daviddoria/ITKVTKHelpers.git
