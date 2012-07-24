@@ -22,7 +22,8 @@ void ITKVTKCamera::SharedConstructor()
   this->BottomToTop[2] = 0;
 }
 
-ITKVTKCamera::ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer, vtkRenderWindow* renderWindow)
+ITKVTKCamera::ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer,
+                           vtkRenderWindow* renderWindow)
 {
   SharedConstructor();
   SetRenderer(renderer);

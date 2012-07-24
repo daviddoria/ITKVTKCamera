@@ -9,3 +9,5 @@ include(${VTK_USE_FILE})
 
 add_library(ITKVTKCamera ITKVTKCamera.cpp)
 target_link_libraries(ITKVTKCamera ${VTK_LIBRARIES})
+
+add_subdirectory(Examples)
