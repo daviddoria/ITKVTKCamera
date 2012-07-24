@@ -1,3 +1,8 @@
+// ITK
+#include "itkVectorImage.h"
+#include "itkImageFileReader.h"
+
+// VTK
 #include <vtkVersion.h>
 #include <vtkImageData.h>
 #include <vtkSmartPointer.h>
@@ -9,19 +14,37 @@
 #include <vtkImageSliceMapper.h>
 #include <vtkImageSlice.h>
 
-void CreateColorImage(vtkImageData*);
+// Submodules
+#include "ITKVTKHelpers/ITKVTKHelpers.h"
 
-int main(int, char *[])
+// Custom
+#include "ITKVTKCamera.h"
+
+// STL
+#include <stdexcept>
+
+int main(int argc, char *argv[])
 {
-  vtkSmartPointer<vtkImageData> colorImage = vtkSmartPointer<vtkImageData>::New();
-  CreateColorImage(colorImage);
+  if(argc != 2)
+  {
+    throw std::runtime_error("Required arguments: image.mha");
+  }
+
+  std::string imageFileName = argv[1];
+  
+  typedef itk::VectorImage<unsigned char, 2> ImageType;
+  typedef itk::ImageFileReader<ImageType> ReaderType;
+  
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(imageFileName);
+  reader->Update();
+
+  vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
+
+  ITKVTKHelpers::ITKImageToVTKRGBImage(reader->GetOutput(), image);
 
   vtkSmartPointer<vtkImageSliceMapper> imageSliceMapper = vtkSmartPointer<vtkImageSliceMapper>::New();
-#if VTK_MAJOR_VERSION <= 5
-  imageSliceMapper->SetInputConnection(colorImage->GetProducerPort());
-#else
-  imageSliceMapper->SetInputData(colorImage);
-#endif
+  imageSliceMapper->SetInputData(image);
   vtkSmartPointer<vtkImageSlice> imageSlice = vtkSmartPointer<vtkImageSlice>::New();
   imageSlice->SetMapper(imageSliceMapper);
 
@@ -48,24 +71,11 @@ int main(int, char *[])
   renderWindowInteractor->SetRenderWindow(renderWindow);
   renderWindowInteractor->Initialize();
 
+  // Thi is actually not needed here - displaying an MHA file results in the image right-side-up by default
+  ITKVTKCamera itkvtkCamera(style, renderer, renderWindow);
+  itkvtkCamera.SetCameraPositionMHA();
+
   renderWindowInteractor->Start();
 
   return EXIT_SUCCESS;
-}
-
-void CreateColorImage(vtkImageData* image)
-{
-  image->SetDimensions(10, 10, 1);
-  image->AllocateScalars(VTK_UNSIGNED_CHAR,3);
-
-  for(unsigned int x = 0; x < 10; x++)
-    {
-    for(unsigned int y = 0; y < 10; y++)
-      {
-      unsigned char* pixel = static_cast<unsigned char*>(image->GetScalarPointer(x,y,0));
-      pixel[0] = 255;
-      pixel[1] = 0;
-      pixel[2] = 255;
-      }
-    }
 }

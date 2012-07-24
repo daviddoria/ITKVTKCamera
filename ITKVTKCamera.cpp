@@ -11,8 +11,6 @@ ITKVTKCamera::ITKVTKCamera()
 
 void ITKVTKCamera::SharedConstructor()
 {
-  this->Flipped = false;
-
   this->LeftToRight[0] = -1;
   this->LeftToRight[1] = 0;
   this->LeftToRight[2] = 0;
@@ -20,15 +18,21 @@ void ITKVTKCamera::SharedConstructor()
   this->BottomToTop[0] = 0;
   this->BottomToTop[1] = 1;
   this->BottomToTop[2] = 0;
+
+  SetCameraPosition(this->LeftToRight, this->BottomToTop);
 }
 
 ITKVTKCamera::ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer,
                            vtkRenderWindow* renderWindow)
 {
-  SharedConstructor();
   SetRenderer(renderer);
-  SetInteractorStyle(interactorStyle);
   SetRenderWindow(renderWindow);
+  SetInteractorStyle(interactorStyle);
+
+  // Without this line, if the image has not been clicked, the camera is not affected
+  interactorStyle->SetCurrentRenderer(renderer);
+
+  SharedConstructor();
 }
 
 void ITKVTKCamera::FlipVertically()
@@ -43,26 +47,26 @@ void ITKVTKCamera::FlipHorizontally()
   SetCameraPosition(this->LeftToRight, this->BottomToTop);
 }
 
-void ITKVTKCamera::SetCameraPosition1()
+void ITKVTKCamera::SetCameraPositionPNG()
 {
-  this->LeftToRight[0] = -1;
-  this->LeftToRight[1] = 0;
-  this->LeftToRight[2] = 0;
-
-  this->BottomToTop[0] = 0;
-  this->BottomToTop[1] = 1;
-  this->BottomToTop[2] = 0;
-  SetCameraPosition(this->LeftToRight, this->BottomToTop);
-}
-
-void ITKVTKCamera::SetCameraPosition2()
-{
-  this->LeftToRight[0] = -1;
+  this->LeftToRight[0] = 1;
   this->LeftToRight[1] = 0;
   this->LeftToRight[2] = 0;
 
   this->BottomToTop[0] = 0;
   this->BottomToTop[1] = -1;
+  this->BottomToTop[2] = 0;
+  SetCameraPosition(this->LeftToRight, this->BottomToTop);
+}
+
+void ITKVTKCamera::SetCameraPositionMHA()
+{
+  this->LeftToRight[0] = 1;
+  this->LeftToRight[1] = 0;
+  this->LeftToRight[2] = 0;
+
+  this->BottomToTop[0] = 0;
+  this->BottomToTop[1] = 1;
   this->BottomToTop[2] = 0;
 
   SetCameraPosition(this->LeftToRight, this->BottomToTop);
@@ -77,18 +81,10 @@ void ITKVTKCamera::SetCameraPosition(const double leftToRight[3], const double b
   this->RenderWindow->Render();
 }
 
-
-void ITKVTKCamera::Flip()
+void ITKVTKCamera::FlipBoth()
 {
-  if(this->Flipped)
-    {
-    SetCameraPosition1();
-    }
-  else
-    {
-    SetCameraPosition2();
-    }
-  this->Flipped = !this->Flipped;
+  FlipHorizontally();
+  FlipVertically();
 }
 
 void ITKVTKCamera::SetInteractorStyle(vtkInteractorStyleImage* interactorStyle)

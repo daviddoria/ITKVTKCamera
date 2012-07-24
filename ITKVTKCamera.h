@@ -15,13 +15,14 @@ public:
   ITKVTKCamera();
 
   /** This constructor provides all of the information necessary. */
-  ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer, vtkRenderWindow* renderWindow);
+  ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer,
+               vtkRenderWindow* renderWindow);
 
   /** Initializations performed by all constructors. */
   void SharedConstructor();
 
   /** Flip the image in both dimensions. */
-  void Flip();
+  void FlipBoth();
 
   /** Flip the image vertically. */
   void FlipVertically();
@@ -29,8 +30,11 @@ public:
   /** Flip the image horizontally. */
   void FlipHorizontally();
 
-  void SetCameraPosition1();
-  void SetCameraPosition2();
+  /** Set the camera position so that PNG files read with ITK are displayed right-side-up. */
+  void SetCameraPositionPNG();
+
+  /** Set the camera position so that MHA files read with ITK are displayed right-side-up. */
+  void SetCameraPositionMHA();
 
   // These functions are provided in case the default constructor must be used.
   // That would happen in the case where a ITKVTKCamera object object was stored
@@ -56,8 +60,6 @@ private:
 
   /** The interactor style that is attached to the Renderer. */
   vtkInteractorStyleImage* InteractorStyle;
-
-  bool Flipped;
 
   double LeftToRight[3];
   double BottomToTop[3];
