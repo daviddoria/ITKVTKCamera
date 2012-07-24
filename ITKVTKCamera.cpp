@@ -1,10 +1,14 @@
 #include "ITKVTKCamera.h"
 
+// VTK
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkInteractorStyleImage.h>
 
-ITKVTKCamera::ITKVTKCamera()
+// STL
+#include <stdexcept>
+
+ITKVTKCamera::ITKVTKCamera() : Renderer(NULL), RenderWindow(NULL), InteractorStyle(NULL)
 {
   SharedConstructor();
 }
@@ -18,21 +22,23 @@ void ITKVTKCamera::SharedConstructor()
   this->BottomToTop[0] = 0;
   this->BottomToTop[1] = 1;
   this->BottomToTop[2] = 0;
-
-  SetCameraPosition(this->LeftToRight, this->BottomToTop);
 }
 
 ITKVTKCamera::ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer,
                            vtkRenderWindow* renderWindow)
 {
+  Initialize(interactorStyle, renderer, renderWindow);
+  SharedConstructor();
+
+  SetCameraPosition(this->LeftToRight, this->BottomToTop);
+}
+
+void ITKVTKCamera::Initialize(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer,
+                              vtkRenderWindow* renderWindow)
+{
   SetRenderer(renderer);
   SetRenderWindow(renderWindow);
   SetInteractorStyle(interactorStyle);
-
-  // Without this line, if the image has not been clicked, the camera is not affected
-  interactorStyle->SetCurrentRenderer(renderer);
-
-  SharedConstructor();
 }
 
 void ITKVTKCamera::FlipVertically()
@@ -90,6 +96,16 @@ void ITKVTKCamera::FlipBoth()
 void ITKVTKCamera::SetInteractorStyle(vtkInteractorStyleImage* interactorStyle)
 {
   this->InteractorStyle = interactorStyle;
+  if(this->Renderer)
+  {
+    // Without this line, if the image has not been clicked, the camera is not affected
+    interactorStyle->SetCurrentRenderer(this->Renderer);
+  }
+  else
+  {
+    throw std::runtime_error("ITKVTKCamera::SetInteractorStyle:\
+                              renderer must be set before interactorStyle!");
+  }
 }
 
 void ITKVTKCamera::SetRenderer(vtkRenderer* renderer)

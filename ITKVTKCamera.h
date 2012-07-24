@@ -18,6 +18,10 @@ public:
   ITKVTKCamera(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer,
                vtkRenderWindow* renderWindow);
 
+  /** Initialize everything. */
+  void Initialize(vtkInteractorStyleImage* interactorStyle, vtkRenderer* renderer,
+                  vtkRenderWindow* renderWindow);
+
   /** Initializations performed by all constructors. */
   void SharedConstructor();
 
