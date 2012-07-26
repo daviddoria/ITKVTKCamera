@@ -4,18 +4,22 @@ PROJECT(ITKVTKCamera)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
 
+# VTK
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 
+# ITK
 FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase ITKIOPNG ITKIOMeta
 ITKImageIntensity ITKImageFeature ITKMathematicalMorphology ITKBinaryMathematicalMorphology ITKDistanceMap)
 INCLUDE(${ITK_USE_FILE})
 
+# Submodules
 if(NOT TARGET ITKVTKHelpers)
   add_subdirectory(ITKVTKHelpers)
   include_directories(${ITKVTKHelpers_includes})
 endif()
 
+# Create the library
 add_library(ITKVTKCamera ITKVTKCamera.cpp)
 target_link_libraries(ITKVTKCamera ${VTK_LIBRARIES} ${ITK_LIBRARIES})
 
