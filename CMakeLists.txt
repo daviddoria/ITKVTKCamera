@@ -17,6 +17,8 @@ INCLUDE(${ITK_USE_FILE})
 if(NOT TARGET ITKVTKHelpers)
   add_subdirectory(ITKVTKHelpers)
   include_directories(${ITKVTKHelpers_includes})
+  set(ITKVTKCamera_includes ${ITKVTKCamera_includes} ${ITKVTKHelpers_includes})
+  set(ITKVTKCamera_libraries ${ITKVTKCamera_libraries} ITKVTKHelpers)
 endif()
 
 # Create the library
