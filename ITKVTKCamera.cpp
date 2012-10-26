@@ -8,7 +8,7 @@
 // STL
 #include <stdexcept>
 
-ITKVTKCamera::ITKVTKCamera() : Renderer(NULL), RenderWindow(NULL), InteractorStyle(NULL)
+ITKVTKCamera::ITKVTKCamera()
 {
   SharedConstructor();
 }

@@ -57,13 +57,13 @@ private:
   void SetCameraPosition(const double leftToRight[3], const double bottomToTop[3]);
 
   /** The Renderer that the image is displayed in. */
-  vtkRenderer* Renderer;
+  vtkRenderer* Renderer = nullptr;
 
   /** The render window that the image is displayed in. */
-  vtkRenderWindow* RenderWindow;
+  vtkRenderWindow* RenderWindow = nullptr;
 
   /** The interactor style that is attached to the Renderer. */
-  vtkInteractorStyleImage* InteractorStyle;
+  vtkInteractorStyleImage* InteractorStyle = nullptr;
 
   double LeftToRight[3];
   double BottomToTop[3];
