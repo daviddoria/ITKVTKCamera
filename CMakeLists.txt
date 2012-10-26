@@ -25,14 +25,14 @@ endif()
 # Create the library
 add_library(ITKVTKCamera ITKVTKCamera.cpp)
 target_link_libraries(ITKVTKCamera ${VTK_LIBRARIES} ${ITK_LIBRARIES})
+set(ITKVTKCamera_libraries ${ITKVTKCamera_libraries} ITKVTKCamera) # Add the library to the list of libraries used
 
-# Allow inheritance of include directories
-if(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-  set(ITKVTKCamera_includes ${ITKVTKCamera_includes} ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
-  set(ITKVTKCamera_libraries ${ITKVTKCamera_libraries} ITKVTKCamera PARENT_SCOPE)
-endif()
+# Allow this project to be detected and used as a submodule
+set(ITKVTKCamera_include_dirs ${ITKVTKCamera_include_dirs} ${CMAKE_CURRENT_SOURCE_DIR})
+set_property(GLOBAL PROPERTY ITKVTKCameraIncludeDirs ${ITKVTKCamera_include_dirs})
+set_property(GLOBAL PROPERTY ITKVTKCameraLibs ${ITKVTKCamera_libraries})
 
-SET(ITKVTKCamera_BuildExamples OFF CACHE BOOL "ITKVTKCamera_BuildExamples")
+option(ITKVTKCamera_BuildExamples "ITKVTKCamera_BuildExamples")
 if(ITKVTKCamera_BuildExamples)
   add_subdirectory(Examples)
 endif(ITKVTKCamera_BuildExamples)
