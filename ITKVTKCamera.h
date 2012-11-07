@@ -58,9 +58,6 @@ public:
   /** Set the camera position so that MHA files read with ITK are displayed right-side-up. */
   void SetCameraPositionMHA();
 
-  // These functions are provided in case the default constructor must be used.
-  // That would happen in the case where a ITKVTKCamera object object was stored
-  // as a non-pointer member.
   /** Set the interactor style that is attached to the Renderer. */
   void SetInteractorStyle(vtkInteractorStyleImage* interactorStyle);
 
@@ -71,6 +68,7 @@ public:
   void SetRenderWindow(vtkRenderWindow* renderWindow);
 
 private:
+
   /** Set the camera to a specific position. */
   void SetCameraPosition(const double leftToRight[3], const double bottomToTop[3]);
 
@@ -83,7 +81,10 @@ private:
   /** The interactor style that is attached to the Renderer. */
   vtkInteractorStyleImage* InteractorStyle = nullptr;
 
+  /** The vector currently defining the camera's left-to-right axis. */
   double LeftToRight[3];
+
+  /** The vector currently defining the camera's bottom-to-top axis. */
   double BottomToTop[3];
 };
 
