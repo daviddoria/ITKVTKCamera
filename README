@@ -1,0 +1,8 @@
+You must clone this repository with:
+
+git clone --recursive
+
+because it uses git submodules. If you have already cloned the repository non-recursively (with just 'git clone'), you can do:
+
+git submodule init
+git submodule update --recursive
